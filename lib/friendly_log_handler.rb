@@ -32,7 +32,11 @@ class FriendlyLogHandler
       Dir.entries(@remote+'/'+folder).each do |file|
         next if ignore_file?(file)
         File.makedirs("#{@local}/#{folder}") unless File.exist?("#{@local}/#{folder}")
-        File.move("#{@remote}/#{folder}/#{file}","#{@local}/#{folder}")
+        if @cleanup
+          File.move("#{@remote}/#{folder}/#{file}","#{@local}/#{folder}")
+        else
+          File.copy("#{@remote}/#{folder}/#{file}","#{@local}/#{folder}")
+        end
       end
       Dir.delete("#{@remote}/#{folder}") if @cleanup
     end    

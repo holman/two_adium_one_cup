@@ -1,6 +1,7 @@
+require 'friendly_log_handler'
 class TwoAdiumOneCup < Shoes; end
 
-Shoes.app(:width => 277, :height => 150) do
+Shoes.app(:width => 277, :height => 200) do
   background "#3FA1BF".."#0F3155"
 
   stack(:top => 60) {
@@ -12,19 +13,24 @@ Shoes.app(:width => 277, :height => 150) do
   }
     
   @remote = button "Grab logs from"
+  @remote_path = ''
   @local = button "Copy logs to"
-
+  @local_path = ''
+  
   flow {
     @remote.click {
-      folder = ask_open_folder
-      #Dir[folder].entries
-      alert folder
+      @remote_path = ask_open_folder
     }
   
     @local.click {
-      folder = ask_open_folder
-      #Dir[folder].entries
-      alert folder
+      @local_path = ask_open_folder
+    }
+  }
+  
+  flow {
+    button("Import").click {
+      FriendlyLogHandler.new(@remote_path, @local_path, false).import
+      alert "Done!"
     }
   }
 end
