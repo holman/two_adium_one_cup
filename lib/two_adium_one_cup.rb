@@ -29,8 +29,14 @@ Shoes.app(:width => 277, :height => 200) do
   
   flow {
     button("Import").click {
-      FriendlyLogHandler.new(@remote_path, @local_path, false).import
-      alert "Done!"
+      if @remote_path == ''
+        alert "You must select a place to import logs from"
+      elsif @local_path == ''
+        alert "You must select a place to copy logs to"
+      else
+        FriendlyLogHandler.new(@remote_path, @local_path, false).import
+        alert "Conversations imported."
+      end
     }
   }
 end
